@@ -1,76 +1,72 @@
-import React, { useState, useEffect } from 'react'
-import Loading from './Loading'
-import Signin from './signin'
-import Tours from './Tours'
-// ATTENTION!!!!!!!!!!
-// I SWITCHED TO PERMANENT DOMAIN
-const url = 'https://course-api.com/react-tours-project'
-function App() {
-  const [loading, setloading] = useState(false)
-  const [user, setUser] = useState(false)
-  const [tours, settours] = useState([])
-  const fetchTours = async ()=>{
-    setloading(true);
-    try {
-      const response = await fetch(url);// fetching data from API
-    const php = await response.json(); //Assigning the fetched data json to php, this php will transfer to tours 
-    setloading(false);
-    settours(php);
-    } catch (error) {
-      console.log(error);
-    }
-    
+import React, { useState } from "react";
+import { Modal, Button, Form } from "react-bootstrap";
+import "bootstrap/dist/css/bootstrap.css";
+import "./style.css";
+
+
+
+const LoginForm = ({ onSubmit }) => {
+  
+  return (
+    <Form onSubmit={onSubmit}>
+    <div className="container">
+    <input  type="text" placeholder="Your name.."></input>
+    <input type="text" placeholder="Last name.."></input>
+    <input type="text" placeholder="Age"></input>
+    <input type="text" placeholder="Place"></input>
+    </div>
+      <Button variant="primary" type="submit" block>
+        Login
+      </Button>
+    </Form>
+  );
+};
+
+export default function App() {
+  const [show, setShow] = useState(false);
+  const [button, setButton] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+  const onLoginFormSubmit = (e) => {
+    e.preventDefault();
+    handleClose();
   };
-  useEffect(()=>{
-    fetchTours();
-  }, []);
 
-  const removeTour = (id)=>{
-    const newTour = tours.filter((t)=>t.id!==id)
-    settours(newTour);
-  }
-
-  const submit=(props)=>{
-    console.log('Here');
-    setUser(false);
-  }
- 
-
- 
-//before fetching the loading is true and if statement is executed and display loading in page
-  if(loading)
   return (
-    <main>
-    <Loading/>
-    </main>
-  )
-
-   if(user)
-   return (
-     <main>
-     <Signin submit = {submit} />
-     </main>
-     )
-  //if length of tours become 0, this if condition executes and it again call fetchTours function
-  if(tours.length===0){
-    return(
-      <main>
-      <button onClick={() => setUser(true)}>ADD USER</button>
-      <div className='title'>
-      <button onClick={()=>fetchTours()}>Refresh</button>
+    <>
+    <div class = "d-flex justify-content-between">
+    <div class="btn-group-vertical p-3">
+    <button type="button" class="btn btn-info btnvar">Session/Auth</button>
+    <button type="button" class="btn btn-info btnvar">Master</button>
+    <button type="button" class="btn btn-info btnvar">Order</button>
+    <button onClick={()=>setButton(true)} type="button" class="btn btn-info btnvar">Employee</button>
+    <button type="button" class="btn btn-info btnvar">Customer</button>
+    <button type="button" class="btn btn-info btnvar">Stock audit</button>
+    <button type="button" class="btn btn-info btnvar">Stock</button>
+    </div>
+    {button?
+      <div className="justify-content-md-end p-3 ">
+      
+      <Button className="btn-primary" variant="primary" onClick={handleShow}>
+      Add Employee
+      </Button>
+      </div>:null
+    }
       </div>
-      </main>
-    )
-  }
-  // After getting response the fuction fetchtours sets selloading to false and execute else statement
-  else 
-  return (
-    <main>
-    <button className='mySubmitButton' onClick={()=>setUser(true)}>ADD USER</button>
-    <Tours tours ={tours} //pass tours oject to Tours.js for UI printing
-    removeTour={removeTour}/> // this will pass function to tours.js and from tours.js this function is called
-    </main>
-  )
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Login Form</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <LoginForm onSubmit={onLoginFormSubmit} />
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close Modal
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </>
+  );
 }
-
-export default App
