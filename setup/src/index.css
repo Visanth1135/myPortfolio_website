@@ -21,9 +21,9 @@ text-decoration:none;
 --transition:all 400ms ease;
 
 
---container-with-ig:/>;
+--container-width-lg:75%;
 --container-width-md:86%;
---container-width-ms:90%;
+--container-width-sm:90%;
 }
 
 html{
@@ -59,7 +59,7 @@ body{
 }
 section{
     margin-top: 8rem;
-    height: 100vh;
+    
 }
 
 section>h2,
